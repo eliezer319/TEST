@@ -1,16 +1,30 @@
-// Acceso a la cámara TRASERA
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const snapBtn = document.getElementById('snap');
 const resultDiv = document.getElementById('result');
 const ocrStatus = document.getElementById('ocrStatus');
 
-navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-  .then(stream => { video.srcObject = stream; })
-  .catch(err => { alert("No se pudo acceder a la cámara trasera: " + err); });
+// Intenta primero cámara trasera
+function startCamera() {
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } })
+    .then(stream => { video.srcObject = stream; })
+    .catch(err => {
+      // Si no funciona, usa modo 'environment' sin exact
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(stream => { video.srcObject = stream; })
+        .catch(err2 => {
+          // Si tampoco, usa cualquier cámara disponible
+          navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err3 => {
+              alert("No se pudo acceder a ninguna cámara: " + err3);
+            });
+        });
+    });
+}
+startCamera();
 
 snapBtn.onclick = () => {
-  // Tomar foto
   canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
   canvas.style.display = 'block';
   ocrStatus.innerText = 'Reconociendo...';
@@ -61,10 +75,6 @@ function evaluarRespuestas(text) {
     res += `#${i}: ${match[i-1]||'?'} ${match[i-1]===ANSWERS.matching[i-1]?'✅':'❌'}<br>`;
   }
   total += PTS.matching;
-
-  // IV y V (opcional: requiere OCR más preciso para frases)
-  // Aquí podrías comparar palabras/frases simples si los alumnos escriben muy claro.
-  // Por simplicidad, puedes dejarlo para la siguiente versión si es necesario.
 
   // Nota final
   const nota = Math.round((puntaje/total)*10 * 100) / 100;
