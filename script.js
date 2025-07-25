@@ -1,14 +1,13 @@
-// Acceso a la cámara
+// Acceso a la cámara TRASERA
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const snapBtn = document.getElementById('snap');
 const resultDiv = document.getElementById('result');
 const ocrStatus = document.getElementById('ocrStatus');
 
-// Activar cámara
-navigator.mediaDevices.getUserMedia({ video: true })
+navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
   .then(stream => { video.srcObject = stream; })
-  .catch(err => { alert("No se pudo acceder a la cámara: " + err); });
+  .catch(err => { alert("No se pudo acceder a la cámara trasera: " + err); });
 
 snapBtn.onclick = () => {
   // Tomar foto
