@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Escáner de Exámenes - Biodiversidad</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    video, canvas { border: 1px solid #333; max-width: 100%; }
+    #result { margin-top: 20px; font-size: 1.3em; }
+  </style>
+</head>
+<body>
+  <h1>Escáner de Exámenes - Biodiversidad</h1>
+  <video id="video" width="350" height="480" autoplay></video><br>
+  <button id="snap">Tomar foto</button>
+  <canvas id="canvas" width="350" height="480" style="display:none"></canvas>
+  <div id="ocrStatus"></div>
+  <div id="result"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.0/dist/tesseract.min.js"></script>
+  <script src="answers.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
